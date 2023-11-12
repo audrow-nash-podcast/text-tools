@@ -1,4 +1,4 @@
-use clap::{arg, command, value_parser, ArgAction, Command};
+use clap::{arg, command, value_parser};
 use std::path::PathBuf;
 
 mod mark_transcript;

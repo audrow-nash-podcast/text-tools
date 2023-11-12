@@ -34,7 +34,13 @@ fn get_md_table_of_contents(outline_entries: &Vec<OutlineEntry>) -> String {
             "- [[{}] {}](#{})",
             entry.time_code,
             entry.text,
-            entry.text.to_lowercase().replace(" ", "-")
+            entry
+                .text
+                .to_lowercase()
+                .replace(" ", "-")
+                .chars()
+                .filter(|c| c.is_alphanumeric() || *c == '-')
+                .collect::<String>()
         ));
     }
     output_text.join("\n")
