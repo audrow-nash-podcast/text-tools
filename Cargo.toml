@@ -3,3 +3,4 @@ members = [
     "transcript_marker",
     "description_maker",
 ]
+resolver = "2"

@@ -1,7 +1,7 @@
 use regex::Regex;
-use std::str::FromStr;
-use std::error::Error;
 use std::cmp::Ordering;
+use std::error::Error;
+use std::str::FromStr;
 
 #[derive(Debug, PartialEq)]
 pub struct TimeCode {
@@ -32,8 +32,8 @@ impl PartialOrd for TimeCode {
 
 impl TimeCode {
     pub fn from_str(text: &str) -> Result<TimeCode, Box<dyn Error>> {
-
-        let time_code_regex = Regex::new(r"(\d{2,}):(\d{2}):(\d{2})").expect("Time code regex is valid");
+        let time_code_regex =
+            Regex::new(r"(\d{2,}):(\d{2}):(\d{2})").expect("Time code regex is valid");
         let captures = time_code_regex.captures(text).ok_or("Invalid time code")?;
 
         let hours = u32::from_str(&captures[1])?;
@@ -175,5 +175,4 @@ mod tests {
         assert!(t3 < t4);
         assert!(t4 < t5);
     }
-
 }

@@ -1,0 +1,27 @@
+---
+source: transcript_marker/src/mark_transcript.rs
+expression: new_transcript
+---
+## Table of Contents
+
+- [[00:00:00] Introduction](#introduction)
+- [[00:01:30] Nag and Mike introduce themselves](#nag-and-mike-introduce-themselves)
+- [[00:03:09] Nag and Mike introduce electric sheep](#nag-and-mike-introduce-electric-sheep)
+
+## Introduction
+
+[00:00:00] **Audrow Nash:** I've talked to a lot of people about this interview, and I'm excited that I get to share it with you. In it, I talk with Nag and Mike from Electric Sheep. They're doing many things differently than most robotics companies that I've talked to, and they're making big bets that I think will pay off. Here are three examples to show you what I mean.
+
+First, they're throwing away classical robotics approaches, and instead... using machine learning. I'm not just talking about for perception or parameter optimization, but even for things like localization or high level control. Second, they've turned the lawn mowing problem on its head to make robots that are intrinsically safer.
+
+And third, instead of selling their robots or doing a subscription model, they buy profitable landscaping businesses and give those companies robots. There are a lot of advantages to this last point and you'll see the details of each during the interview. I hope it surprises you as much as it did me. I think you'll enjoy this interview if you're curious about how AI and robotics can fit together in a real application and if you want to see a new robotics business model that I think will be very popular in the near future.
+
+## Nag and Mike introduce themselves
+
+[00:01:37] **Nag Murty:** Yeah. Hi everyone. I'm Nag Murthy. I'm the CEO and co founder of Electric Sheep Robotics.
+
+And then over time, we plan to use those, automated robots to improve our own margins over time. So that's what we do.
+
+## Nag and Mike introduce electric sheep
+
+[00:03:09] **Michael Laskey:** Yeah, I can take that one.

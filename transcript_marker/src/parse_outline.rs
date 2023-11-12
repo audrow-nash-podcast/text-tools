@@ -2,7 +2,6 @@ use regex::Regex;
 
 use crate::types::{OutlineEntry, TimeCode};
 
-
 #[derive(Debug)]
 pub enum ParseOutlineError {
     InvalidTimeCode(String),
@@ -34,7 +33,8 @@ pub fn parse_outline(outline: &str) -> Result<Vec<OutlineEntry>, ParseOutlineErr
         let captures = outline_entry_regex
             .captures(line)
             .ok_or(ParseOutlineError::InvalidOutlineEntry(line.to_string()))?;
-        let time_code = TimeCode::from_str(&captures[1]).map_err(|_| ParseOutlineError::InvalidTimeCode(captures[1].to_string()))?;
+        let time_code = TimeCode::from_str(&captures[1])
+            .map_err(|_| ParseOutlineError::InvalidTimeCode(captures[1].to_string()))?;
         let text = &captures[2];
         if text.is_empty() {
             return Err(ParseOutlineError::InvalidOutlineEntry(line.to_string()));
@@ -126,7 +126,6 @@ mod tests {
             assert_eq!(entry.text, outline_entries[i].text, "entry: {:?}", entry);
         }
     }
-
 
     #[test]
     fn error_for_invalid_minutes() {
