@@ -1,0 +1,28 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+          "type": "lldb",
+          "request": "launch",
+          "name": "Debug executable 'transcript_marker'",
+          "cargo": {
+            "args": [
+              "build",
+              "--bin=transcript_marker",
+              "--package=transcript_marker"
+            ],
+            "filter": {
+              "name": "transcript_marker",
+              "kind": "bin"
+            }
+          },
+          "args": [
+            "episode/transcript.md",
+            "episode/time_codes.txt",
+            "-o",
+            "episode/transcript_with_time_codes.md"
+          ],
+          "cwd": "${workspaceFolder}"
+        }
+    ]
+}

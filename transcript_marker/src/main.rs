@@ -1,5 +1,5 @@
-use std::path::PathBuf;
 use clap::{arg, command, value_parser, ArgAction, Command};
+use std::path::PathBuf;
 
 mod mark_transcript;
 use mark_transcript::mark_transcript;
@@ -7,46 +7,53 @@ use mark_transcript::mark_transcript;
 mod parse_outline;
 use parse_outline::parse_outline;
 
+mod types;
+
 fn main() {
-    let matches = command!() // requires `cargo` feature
+    let matches = command!()
+        .version("1.0")
+        .author("Audrow Nash")
+        .about("Marks a transcript with time codes and adds a table of contents")
         .arg(
             arg!(
-                -t --transcript <FILE> "Sets the path to the transcript file"
+                <transcript> "Sets the path to the transcript file"
+            )
+            .value_parser(value_parser!(PathBuf)),
+        )
+        .arg(
+            arg!(
+                <time_codes> "Sets the path to the time codes file"
             )
             .required(true)
             .value_parser(value_parser!(PathBuf)),
         )
         .arg(
             arg!(
-                -c --time_codes <FILE> "Sets the path to the time codes file"
-            )
-            .required(true)
-            .value_parser(value_parser!(PathBuf)),
-        )
-        .arg(
-            arg!(
-                -o --out_file <FILE> "Optional path for where to save the output file"
+                -o --out_file <file> "Path for where to save the output file"
             )
             .default_value("marked_transcript.txt")
-            .required(false)
             .value_parser(value_parser!(PathBuf)),
         )
         .get_matches();
 
-    let transcript_path: &PathBuf = matches.get_one("transcript").expect("transcript is required");
-    let time_codes_path: &PathBuf = matches.get_one("time_codes").expect("time_codes is required");
-    let out_path: &PathBuf = matches.get_one("out_file").expect("out_file is required");
+    let transcript_path: &PathBuf = matches
+        .get_one("transcript")
+        .expect("A transcript file was provided");
+    let time_codes_path: &PathBuf = matches
+        .get_one("time_codes")
+        .expect("A time codes file was provided");
+    let out_path: &PathBuf = matches
+        .get_one("out_file")
+        .expect("An output file was provided");
 
-    println!("transcript: {:?}", transcript_path);
-    println!("time_codes: {:?}", time_codes_path);
-    println!("out_file: {:?}", out_path);
+    let transcript =
+        std::fs::read_to_string(transcript_path).expect("The transcript file to be read");
+    let time_codes =
+        std::fs::read_to_string(time_codes_path).expect("The time codes file to be read");
 
-    let transcript = std::fs::read_to_string(transcript_path).expect("failed to read transcript file");
-    let time_codes = std::fs::read_to_string(time_codes_path).expect("failed to read time codes file");
+    let mut outline_entries = parse_outline(&time_codes).expect("The time codes file to be parsed");
+    let new_transcript =
+        mark_transcript(&transcript, &mut outline_entries).expect("The transcript to be marked");
 
-    let mut outline_entries = parse_outline(&time_codes).expect("failed to parse outline");
-    let new_transcript = mark_transcript(&transcript, &mut outline_entries).unwrap();
-
-    std::fs::write(out_path, new_transcript).expect("failed to write output file");
-
+    std::fs::write(out_path, new_transcript).expect("The output file to be written");
 }

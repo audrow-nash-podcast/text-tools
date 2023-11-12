@@ -16,7 +16,7 @@ pub fn mark_transcript(
     for line in text.lines() {
         if let Some(captures) = line_regex.captures(line) {
             let time_code = TimeCode::from_str(&captures[1])?;
-            if time_code >= outline_entries[0].time_code {
+            if outline_entries.len() > 0 && time_code >= outline_entries[0].time_code {
                 let entry = outline_entries.remove(0);
                 output_text.push(format!("## {}\n", entry.text));
             }
