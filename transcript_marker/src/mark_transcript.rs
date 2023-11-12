@@ -31,19 +31,24 @@ fn get_md_table_of_contents(outline_entries: &Vec<OutlineEntry>) -> String {
     let mut output_text: Vec<String> = vec![];
     for entry in outline_entries {
         output_text.push(format!(
-            "- [[{}] {}](#{})",
+            "- [[{}] {}]({})",
             entry.time_code,
             entry.text,
-            entry
-                .text
-                .to_lowercase()
-                .replace(" ", "-")
-                .chars()
-                .filter(|c| c.is_alphanumeric() || *c == '-')
-                .collect::<String>()
+            get_md_heading_url(&entry.text)
         ));
     }
     output_text.join("\n")
+}
+
+fn get_md_heading_url(text: &str) -> String {
+    format!(
+        "#{}",
+        text.to_lowercase()
+            .replace(" ", "-")
+            .chars()
+            .filter(|c| c.is_alphanumeric() || *c == '-')
+            .collect::<String>()
+    )
 }
 
 #[cfg(test)]
@@ -95,5 +100,18 @@ And then over time, we plan to use those, automated robots to improve our own ma
         let new_transcript = mark_transcript(transcript, &mut outline_entries)
             .expect("Mark transcript should succeed");
         assert_snapshot!(new_transcript);
+    }
+
+    #[test]
+    fn get_md_heading_url_test() {
+        assert_eq!(get_md_heading_url("Start"), "#start".to_string());
+        assert_eq!(
+            get_md_heading_url("Introducing Bradley + Luxonis"),
+            "#introducing-bradley--luxonis".to_string()
+        );
+        assert_eq!(
+            get_md_heading_url("Special characters!@#$%^&*()_+[]~><👍🤖"),
+            "#special-characters".to_string()
+        );
     }
 }
