@@ -1,0 +1,40 @@
+Episode Links
+
+{%- if podcast_info.transcript_site_url -%}
+    {% if episode_info.number -%}
+        {%- set title_slug = episode_info.number ~ ' ' ~ episode_info.title | slugify -%}
+    {% else -%}
+        {%- set title_slug = episode_info.title | slugify -%}
+    {% endif -%}
+    {% set transcript_url = [podcast_info.transcript_site_url, title_slug] | join(sep="/") %}
+- Full transcript: {{ transcript_url }}
+{%- endif -%}
+
+{%- if episode_info.other_urls -%}
+{%- for link in episode_info.other_urls -%}
+- {{ link.text }}: {{ link.href }}
+{%- endfor -%}
+{%- endif -%}
+
+{%- for interviewee in episode_info.interviewees -%}
+{% if interviewee.website_url %}- {{ interviewee.short_name }}'s website: {{ interviewee.website_url }}{% endif %}
+{% if interviewee.email %}- {{ interviewee.short_name }}'s email: mailto:{{ interviewee.email }}{% endif %}
+{% if interviewee.x_username %}- {{ interviewee.short_name }}'s X: https://twitter.com/{{ interviewee.x_username }}{% endif %}
+{% if interviewee.linkedin_url %}- {{ interviewee.short_name }}'s LinkedIn: {{ interviewee.linkedin_url }}{% endif %}
+{%- endfor -%}
+
+{%- for organization in episode_info.organizations -%}
+{% if organization.website_url %}- {{ organization.name }}'s website: {{ organization.website_url }}{% endif %}
+{% if organization.x_username %}- {{ organization.name }}'s X: https://twitter.com/{{ organization.x_username }}{% endif %}
+{% if organization.linkedin_url %}- {{ organization.name }}'s LinkedIn: {{ organization.linkedin_url }}{% endif %}
+{%- endfor %}
+
+Podcast links
+
+{% if podcast_info.website_url %}- Website: {{ podcast_info.website_url }}{% endif %}
+{% if podcast_info.x_username %}- X: https://twitter.com/{{ podcast_info.x_username }}{% endif %}
+{% if podcast_info.linkedin_url %}- LinkedIn: {{ podcast_info.linkedin_url }}{% endif %}
+{% if podcast_info.youtube_url %}- YouTube: {{ podcast_info.youtube_url }}{% endif %}
+{% if podcast_info.spotify_url %}- Spotify: {{ podcast_info.spotify_url }}{% endif %}
+{% if podcast_info.apple_podcasts_url %}- Apple Podcasts: {{ podcast_info.apple_podcasts_url }}{% endif %}
+{% if podcast_info.rss_url %}- RSS: {{ podcast_info.rss_url }}{% endif %}
