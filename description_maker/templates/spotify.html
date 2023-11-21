@@ -1,0 +1,19 @@
+{{episode.description|linebreaks|safe}}
+
+TRANSCRIPT
+{{ crate::get_transcript_url(episode, podcast_info) }}
+
+EPISODE LINKS
+{%- for link in episode.links %}
+<a href="{{link.href}}">{{link.text}}</a>
+{%- endfor %}
+
+PODCAST LINKS
+{%- for link in podcast_info.links %}
+<a href="{{link.href}}">{{link.text}}</a>
+{%- endfor %}
+
+OUTLINE
+{%- for time_code in episode.time_codes %}
+{{time_code.timestamp }} - {{time_code.text}}
+{%- endfor %}

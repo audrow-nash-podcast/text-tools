@@ -1,49 +1,44 @@
-use serde::{Deserialize, Serialize};
-use serde_yaml;
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Interviewee {
-    pub full_name: String,
-    pub short_name: String,
-    pub title: String,
-    pub website_url: Option<String>,
-    pub email: Option<String>,
-    pub x_username: Option<String>,
-    pub linkedin_url: Option<String>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct Organization {
-    pub name: String,
-    pub website_url: Option<String>,
-    pub x_username: Option<String>,
-    pub linkedin_url: Option<String>,
-}
-
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Clone, Debug)]
 pub struct Link {
-    pub href: String,
     pub text: String,
+    pub href: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-pub struct EpisodeInfo {
+#[derive(Clone, Debug)]
+pub struct Timestamp {
+    pub hours: u16,
+    pub minutes: u16,
+    pub seconds: u16,
+}
+
+impl std::fmt::Display for Timestamp {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{:02}:{:02}:{:02}",
+            self.hours, self.minutes, self.seconds
+        )
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct TimeCode {
+    pub text: String,
+    pub timestamp: Timestamp,
+}
+
+#[derive(Clone, Debug)]
+pub struct Episode {
     pub title: String,
-    pub number: Option<u16>,
+    pub number: u16,
     pub description: String,
-    pub other_urls: Option<Vec<Link>>,
-    pub interviewees: Vec<Interviewee>,
-    pub organizations: Vec<Organization>,
+    pub links: Vec<Link>,
+    pub time_codes: Vec<TimeCode>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Clone, Debug)]
 pub struct PodcastInfo {
-    pub website_url: Option<String>,
-    pub x_username: Option<String>,
-    pub linkedin_url: Option<String>,
-    pub youtube_url: Option<String>,
-    pub spotify_url: Option<String>,
-    pub apple_podcasts_url: Option<String>,
-    pub rss_url: Option<String>,
-    pub transcript_site_url: Option<String>,
+    pub name: String,
+    pub transcript_site_url: String,
+    pub links: Vec<Link>,
 }

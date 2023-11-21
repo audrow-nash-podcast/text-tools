@@ -1,83 +1,109 @@
-use std::vec;
+use askama::Template; // bring trait in scope
+use htmlescape;
 
 mod types;
-use types::{EpisodeInfo, Interviewee, Link, Organization, PodcastInfo};
+use types::{Episode, Link, PodcastInfo, TimeCode, Timestamp};
 
-use serde::{Deserialize, Serialize};
-use tera;
+fn get_episode_slug(episode: &Episode) -> String {
+    format!("{} {}", episode.number, episode.title)
+        .to_lowercase()
+        .replace(" ", "-")
+        .chars()
+        .filter(|c| c.is_alphanumeric() || *c == '-')
+        .collect::<String>()
+}
 
+fn get_transcript_url(episode: &Episode, podcast_info: &PodcastInfo) -> String {
+    let episode_slug = get_episode_slug(episode);
+    format!("{}/{}.html", podcast_info.transcript_site_url, episode_slug)
+}
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
-struct Context {
-    episode_info: EpisodeInfo,
+fn prepare_html(text: &str) -> String {
+    htmlescape::encode_minimal(text)
+        .replace("\n", "<br/>")
+        .replace("-", "&#8211;")
+}
+
+#[derive(Template, Clone)]
+#[template(path = "spotify.html")]
+struct SpotifyTemplate {
+    episode: Episode,
     podcast_info: PodcastInfo,
+}
+
+#[derive(Template, Clone)]
+#[template(path = "content.md")]
+struct ContentTemplate {
+    episode: Episode,
+    podcast_info: PodcastInfo,
+    spotify_html: String,
 }
 
 fn main() {
     let podcast_info = PodcastInfo {
-        website_url: Some("wwww.audrow.com".to_string()),
-        x_username: Some("audrow".to_string()),
-        linkedin_url: Some("https://www.linkedin.com/in/audrow".to_string()),
-        youtube_url: Some("www.foo.com".to_string()),
-        spotify_url: Some("www.foo.com".to_string()),
-        apple_podcasts_url: Some("www.foo.com".to_string()),
-        rss_url: Some("www.foo.com".to_string()),
-        transcript_site_url: Some("https://audrow-nash-podcast.github.io/transcripts".to_string()),
+        name: "Audrow Nash Podcast".to_string(),
+        transcript_site_url: "https://www.audrow.com".to_string(),
+        links: vec![
+            Link {
+                text: "LinkedIn".to_string(),
+                href: "https://www.linkedin.com/in/audrow/".to_string(),
+            },
+            Link {
+                text: "Website".to_string(),
+                href: "https://www.audrow.com/".to_string(),
+            },
+        ],
     };
-    let context = Context {
-        episode_info: EpisodeInfo {
-            title: "Rethinking Robotics: Electric Sheep's Journey to Safer, Smarter Machines".to_string(),
-            number: Some(1),
-            description: r#"
-How would you make ChatGPT but for the physical world? That's what Electric Sheep Robotics is working on. It's an audacious goal, and to accomplish it, they're doing many things fundamentally different than most robotics companies.
+    let episode = Episode {
+        description: "A podcast about robots and stuff\n\nThe best stuff\n\nThe best".to_string(),
+        title: "Hello, world!".to_string(),
+        number: 1,
+        links: vec![Link {
+            text: "Full transcript".to_string(),
+            href: "https://www.audrow.com/".to_string(),
+        }],
+        time_codes: vec![
+            TimeCode {
+                text: "Introduction".to_string(),
+                timestamp: Timestamp {
+                    hours: 0,
+                    minutes: 0,
+                    seconds: 0,
+                },
+            },
+            TimeCode {
+                text: "Nag and Mike introduce themselves".to_string(),
+                timestamp: Timestamp {
+                    hours: 0,
+                    minutes: 1,
+                    seconds: 30,
+                },
+            },
+            TimeCode {
+                text: "Wrapping up".to_string(),
+                timestamp: Timestamp {
+                    hours: 1,
+                    minutes: 30,
+                    seconds: 30,
+                },
+            },
+        ],
+    };
 
-You'll enjoy this interview if you're interested in how AI and robotics fit together in a real application and if you want to see a new robotics business model that will probably become very popular."#.to_string(),
-            other_urls: None,
-            organizations: vec![Organization {
-                name: "Electric Sheep".to_string(),
-                website_url: Some("https://sheeprobotics.ai/".to_string()),
-                x_username: Some("sheeprobotics".to_string()),
-                linkedin_url: Some("https://www.linkedin.com/company/electric-sheep-robotics".to_string()),
-            }],
-            interviewees: vec![
-                Interviewee {
-                    full_name: "Nag Murty".to_string(),
-                    short_name: "Nag".to_string(),
-                    title: "Founder & CEO".to_string(),
-                    website_url: None,
-                    email: Some("nag@electricsheep.company".to_string()),
-                    x_username: Some("MurtyNag".to_string()),
-                    linkedin_url: Some("https://www.linkedin.com/in/nag-murty-b003383".to_string()),
-                },
-                Interviewee {
-                    full_name: "Mike Laskey".to_string(),
-                    short_name: "Mike".to_string(),
-                    title: "VP of Autonomy".to_string(),
-                    website_url: None,
-                    email: Some("michael.laskey@electricsheep.company".to_string()),
-                    x_username: None,
-                    linkedin_url: Some("https://www.linkedin.com/in/michael-laskey-4b087ba2".to_string()),
-                },
-            ],
-        },
+    let template = SpotifyTemplate {
+        episode: episode.clone(),
         podcast_info: podcast_info.clone(),
     };
 
+    let spotify_html = template.render().expect("Template renders");
+    let spotify_html = prepare_html(&spotify_html);
+    println!("{}", spotify_html);
 
-    let context = tera::Context::from_serialize(context).unwrap();
-    let mut tera = tera::Tera::default();
-
-    let file_directory = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
-    let templates_directory = file_directory.join("src/templates");
-    tera.add_template_files(vec![
-        (templates_directory.join("spotify.html.tera"), Some("spotify")),
-        (templates_directory.join("transcript.md.tera"), Some("transcript")),
-        (templates_directory.join("x.txt.tera"), Some("x")),
-        (templates_directory.join("youtube.txt.tera"), Some("youtube")),
-    ]).expect("Templates to be added");
-
-    let rendered = tera.render("youtube", &context).unwrap();
-    println!("{}", rendered);
-    println!("{}", file!());
+    let content_template = ContentTemplate {
+        episode: episode.clone(),
+        podcast_info: podcast_info.clone(),
+        spotify_html,
+    };
+    let content_md = content_template.render().expect("Template renders");
+    println!("{}", content_md)
 }
-
