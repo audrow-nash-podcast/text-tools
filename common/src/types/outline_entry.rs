@@ -1,7 +1,8 @@
 use crate::types::time_code::TimeCode;
+use serde::{Deserialize, Serialize};
 use std::cmp::Ordering;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
 pub struct OutlineEntry {
     pub time_code: TimeCode,
     pub text: String,

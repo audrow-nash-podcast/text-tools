@@ -36,8 +36,8 @@ PODCAST LINKS
 {%- endfor %}
 
 OUTLINE
-{%- for time_code in time_codes %}
-{{time_code.timestamp }} - {{time_code.text}}
+{%- for entry in outline %}
+{{entry.time_code }} - {{entry.text}}
 {%- endfor %}
 ```
 

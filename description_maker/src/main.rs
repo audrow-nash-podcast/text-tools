@@ -5,7 +5,9 @@ use htmlescape;
 use serde_yaml;
 
 mod types;
-use types::{Episode, Link, PodcastInfo, TimeCode, Timestamp};
+use types::{Episode, Link, PodcastInfo};
+
+use common::{OutlineEntry, TimeCode};
 
 fn get_episode_slug(episode: &Episode) -> String {
     format!("{} {}", episode.number, episode.title)
@@ -32,7 +34,7 @@ fn prepare_html(text: &str) -> String {
 struct SpotifyTemplate {
     episode: Episode,
     podcast_info: PodcastInfo,
-    time_codes: Vec<TimeCode>,
+    outline: Vec<OutlineEntry>,
 }
 
 #[derive(Template, Clone)]
@@ -41,7 +43,7 @@ struct ContentTemplate {
     episode: Episode,
     podcast_info: PodcastInfo,
     spotify_html: String,
-    time_codes: Vec<TimeCode>,
+    outline: Vec<OutlineEntry>,
 }
 
 fn make_podcast_info_starter(save_dir: &str) -> Result<(), Box<dyn std::error::Error>> {
@@ -109,26 +111,26 @@ fn main() {
         &fs::read_to_string(format!("{}/{}.yaml", out_dir, file_name)).expect("Episode to read"),
     )
     .expect("Episode to deserialize");
-    let time_codes = vec![
-        TimeCode {
+    let outline = vec![
+        OutlineEntry {
             text: "Introduction".to_string(),
-            timestamp: Timestamp {
+            time_code: TimeCode {
                 hours: 0,
                 minutes: 0,
                 seconds: 0,
             },
         },
-        TimeCode {
+        OutlineEntry {
             text: "Nag and Mike introduce themselves".to_string(),
-            timestamp: Timestamp {
+            time_code: TimeCode {
                 hours: 0,
                 minutes: 1,
                 seconds: 30,
             },
         },
-        TimeCode {
+        OutlineEntry {
             text: "Wrapping up".to_string(),
-            timestamp: Timestamp {
+            time_code: TimeCode {
                 hours: 1,
                 minutes: 30,
                 seconds: 30,
@@ -139,7 +141,7 @@ fn main() {
     let template = SpotifyTemplate {
         episode: episode.clone(),
         podcast_info: podcast_info.clone(),
-        time_codes: time_codes.clone(),
+        outline: outline.clone(),
     };
 
     let spotify_html = template.render().expect("Template renders");
@@ -150,7 +152,7 @@ fn main() {
         episode: episode.clone(),
         podcast_info: podcast_info.clone(),
         spotify_html,
-        time_codes: time_codes.clone(),
+        outline: outline.clone(),
     };
     let content_md = content_template.render().expect("Template renders");
     println!("{}", content_md);
