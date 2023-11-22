@@ -4,10 +4,7 @@ use std::path::PathBuf;
 mod mark_transcript;
 use mark_transcript::mark_transcript;
 
-mod parse_outline;
-use parse_outline::parse_outline;
-
-mod types;
+use common::parse_outline;
 
 fn main() {
     let matches = command!()

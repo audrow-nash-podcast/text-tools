@@ -1,10 +1,12 @@
-#[derive(Clone, Debug)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Link {
     pub text: String,
     pub href: String,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Timestamp {
     pub hours: u16,
     pub minutes: u16,
@@ -21,22 +23,21 @@ impl std::fmt::Display for Timestamp {
     }
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct TimeCode {
     pub text: String,
     pub timestamp: Timestamp,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct Episode {
     pub title: String,
     pub number: u16,
     pub description: String,
     pub links: Vec<Link>,
-    pub time_codes: Vec<TimeCode>,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct PodcastInfo {
     pub name: String,
     pub transcript_site_url: String,

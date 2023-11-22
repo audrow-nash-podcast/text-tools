@@ -1,4 +1,4 @@
-use crate::types::{OutlineEntry, TimeCode};
+use common::{OutlineEntry, TimeCode};
 use regex::Regex;
 use std::error::Error;
 

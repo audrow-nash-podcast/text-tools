@@ -1,5 +1,6 @@
 [workspace]
 members = [
+    "common",
     "transcript_marker",
     "description_maker",
 ]
