@@ -1,7 +1,7 @@
 {{episode.description|linebreaks|safe}}
 
 TRANSCRIPT
-{{ crate::get_transcript_url(episode, podcast_info) }}
+{{ crate::template::get_transcript_url(episode, podcast_info) }}
 
 EPISODE LINKS
 {%- for link in episode.links %}

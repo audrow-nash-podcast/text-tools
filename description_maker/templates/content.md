@@ -7,7 +7,7 @@ Title
 
 Episode slug
 ```
-{{ crate::get_episode_slug(episode) }}
+{{ crate::template::get_episode_slug(episode) }}
 ```
 
 ### For Spotify
@@ -23,7 +23,7 @@ Content
 {{episode.description}}
 
 TRANSCRIPT
-{{ crate::get_transcript_url(episode, podcast_info) }}
+{{ crate::template::get_transcript_url(episode, podcast_info) }}
 
 EPISODE LINKS
 {%- for link in episode.links %}
