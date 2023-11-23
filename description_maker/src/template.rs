@@ -16,6 +16,7 @@ pub fn and_names_on_x(nouns: &[Noun]) -> String {
     and_items(&names)
 }
 
+#[allow(dead_code)]
 pub fn and_names(nouns: &[Noun]) -> String {
     let names = nouns
         .iter()
