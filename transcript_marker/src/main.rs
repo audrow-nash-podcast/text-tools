@@ -13,7 +13,7 @@ fn main() {
         .about("Marks a transcript with time codes and adds a table of contents")
         .arg(
             arg!(
-                <transcript> "Sets the path to the transcript file"
+                <transcript_path> "Sets the path to the transcript file"
             )
             .value_parser(value_parser!(PathBuf)),
         )
@@ -28,13 +28,13 @@ fn main() {
             arg!(
                 -o --out_file_path <file> "Path for where to save the output file"
             )
-            .default_value("marked_transcript.txt")
+            .default_value("marked_transcript.md")
             .value_parser(value_parser!(PathBuf)),
         )
         .get_matches();
 
     let transcript_path: &PathBuf = matches
-        .get_one("transcript")
+        .get_one("transcript_path")
         .expect("A transcript file was provided");
     let outline_path: &PathBuf = matches
         .get_one("outline_path")
