@@ -8,7 +8,7 @@ use common::parse_outline;
 
 fn main() {
     let matches = command!()
-        .version("1.0")
+        .propagate_version(true)
         .author("Audrow Nash")
         .about("Marks a transcript with time codes and adds a table of contents")
         .arg(

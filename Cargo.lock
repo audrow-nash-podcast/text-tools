@@ -174,7 +174,7 @@ dependencies = [
 
 [[package]]
 name = "description_maker"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "askama",
  "clap",
@@ -428,7 +428,7 @@ dependencies = [
 
 [[package]]
 name = "transcript_marker"
-version = "0.1.0"
+version = "1.0.0"
 dependencies = [
  "clap",
  "common",
