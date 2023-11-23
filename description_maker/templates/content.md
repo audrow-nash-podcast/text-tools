@@ -95,13 +95,6 @@ URL
 
 {{episode.description}}
 
-With {{ crate::template::and_names(episode.guests)}}
-{%- match episode.organization -%}
-    {%- when Some with (org) -%}
-        {{' '}}from {{ crate::template::get_name_on_x(org) }}
-    {%- when None -%}
-{%- endmatch %}
-
 Watch it here: URL
 ```
 
