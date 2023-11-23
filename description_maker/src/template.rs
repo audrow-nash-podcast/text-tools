@@ -5,11 +5,47 @@ use askama::Template;
 use htmlescape;
 use serde_yaml;
 
-use crate::types::{Episode, Link, PodcastInfo};
+use crate::types::{EpisodeInfo, Link, Noun, PodcastInfo};
 
 use common::{parse_outline, OutlineEntry};
 
-pub fn get_episode_slug(episode: &Episode) -> String {
+pub fn and_names_on_x(nouns: &[Noun]) -> String {
+    let names = nouns
+        .iter()
+        .map(|noun| get_name_on_x(noun))
+        .collect::<Vec<String>>();
+    and_items(&names)
+}
+
+pub fn and_names(nouns: &[Noun]) -> String {
+    let names = nouns
+        .iter()
+        .map(|noun| noun.name.clone())
+        .collect::<Vec<String>>();
+    and_items(&names)
+}
+
+pub fn and_items(items: &[String]) -> String {
+    match items.len() {
+        0 => "".to_string(),
+        1 => items[0].clone(),
+        2 => format!("{} and {}", items[0], items[1]),
+        _ => {
+            let mut items = items.to_vec();
+            let last = items.pop().unwrap();
+            format!("{}, and {}", items.join(", "), last)
+        }
+    }
+}
+
+pub fn get_name_on_x(noun: &Noun) -> String {
+    match &noun.x_handle {
+        Some(x_handle) => format!("@{}", x_handle),
+        None => noun.name.clone(),
+    }
+}
+
+pub fn get_episode_slug(episode: &EpisodeInfo) -> String {
     format!("{} {}", episode.number, episode.title)
         .to_lowercase()
         .replace(" ", "-")
@@ -18,7 +54,7 @@ pub fn get_episode_slug(episode: &Episode) -> String {
         .collect::<String>()
 }
 
-fn get_transcript_url(episode: &Episode, podcast_info: &PodcastInfo) -> String {
+fn get_transcript_url(episode: &EpisodeInfo, podcast_info: &PodcastInfo) -> String {
     let episode_slug = get_episode_slug(episode);
     format!("{}/{}.html", podcast_info.transcript_site_url, episode_slug)
 }
@@ -32,7 +68,7 @@ fn prepare_html(text: &str) -> String {
 #[derive(Template, Clone)]
 #[template(path = "spotify.html")]
 struct SpotifyTemplate {
-    episode: Episode,
+    episode: EpisodeInfo,
     podcast_info: PodcastInfo,
     outline: Vec<OutlineEntry>,
 }
@@ -40,7 +76,7 @@ struct SpotifyTemplate {
 #[derive(Template, Clone)]
 #[template(path = "content.md")]
 struct ContentTemplate {
-    episode: Episode,
+    episode: EpisodeInfo,
     podcast_info: PodcastInfo,
     spotify_html: String,
     outline: Vec<OutlineEntry>,
@@ -79,7 +115,7 @@ pub fn make_episode_starter(
     if !std::path::Path::new(save_dir).exists() {
         std::fs::create_dir_all(save_dir)?;
     }
-    let episode = Episode {
+    let episode = EpisodeInfo {
         description: "Your great episode\non multiple lines.".to_string(),
         title: "Hello, world!".to_string(),
         number: 1,
@@ -87,6 +123,14 @@ pub fn make_episode_starter(
             text: "Company's LinkedIn".to_string(),
             href: "https://www.company.com/".to_string(),
         }],
+        guests: vec![Noun {
+            name: "Foo Bar".to_string(),
+            x_handle: Some("foo".to_string()),
+        }],
+        organization: Some(Noun {
+            name: "Company".to_string(),
+            x_handle: Some("company".to_string()),
+        }),
     };
 
     let episode_yaml = serde_yaml::to_string(&episode)?;
@@ -103,7 +147,7 @@ pub fn generate_content_markdown(
     out_file_path: &PathBuf,
 ) -> Result<(), Box<dyn std::error::Error>> {
     let podcast_info = serde_yaml::from_str::<PodcastInfo>(&fs::read_to_string(podcast_path)?)?;
-    let episode = serde_yaml::from_str::<Episode>(&fs::read_to_string(episode_path)?)?;
+    let episode = serde_yaml::from_str::<EpisodeInfo>(&fs::read_to_string(episode_path)?)?;
     let outline = parse_outline(&fs::read_to_string(outline_path)?)?;
 
     let template = SpotifyTemplate {

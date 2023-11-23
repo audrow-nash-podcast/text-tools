@@ -1,24 +1,116 @@
 # Ep. {{episode.number}}: {{episode.title}}
 
-Title
+Title:
 ```
 {{ episode.title }}
 ```
 
-Episode slug
+Episode slug:
 ```
 {{ crate::template::get_episode_slug(episode) }}
 ```
 
-### For Spotify
+### Spotify
 
+Title:
+```
+{{ episode.title }}
+```
+
+Content:
 ```html
 {{ spotify_html }}
 ```
 
-### For YouTube
+### X
 
-Content
+#### Main episode
+
+First Tweet:
+```
+HOOK
+
+{{episode.title}}
+
+With {{ crate::template::and_names_on_x(episode.guests)}}
+{%- match episode.organization -%}
+    {%- when Some with (org) -%}
+        {{' '}}from {{ crate::template::get_name_on_x(org) }}
+    {%- when None -%}
+{%- endmatch -%}
+.
+
+Time codes 👇
+
+{%- for entry in outline %}
+({{entry.time_code }}) {{entry.text}}
+{%- endfor %}
+```
+
+Second tweet with details:
+
+```
+Transcript:
+{{ crate::template::get_transcript_url(episode, podcast_info) }}
+
+Episode links:
+{%- for link in episode.links %}
+{{link.text}}: {{link.href}}
+{%- endfor %}
+
+Podcast links:
+{%- for link in podcast_info.links %}
+{{link.text}}: {{link.href}}
+{%- endfor %}
+```
+
+#### Clips on X
+
+```
+HOOK
+
+With {{ crate::template::and_names_on_x(episode.guests)}}
+{%- match episode.organization -%}
+    {%- when Some with (org) -%}
+        {{' '}}from {{ crate::template::get_name_on_x(org) }}
+    {%- when None -%}
+{%- endmatch -%}
+.
+```
+
+```
+Watch the full interview here 👇
+
+URL
+```
+
+### LinkedIn
+
+```
+🚨 New episode 🚨
+
+{{episode.title}}
+
+{{episode.description}}
+
+With {{ crate::template::and_names(episode.guests)}}
+{%- match episode.organization -%}
+    {%- when Some with (org) -%}
+        {{' '}}from {{ crate::template::get_name_on_x(org) }}
+    {%- when None -%}
+{%- endmatch %}
+
+Watch it here: URL
+```
+
+### YouTube
+
+Title:
+```
+{{ episode.title }}
+```
+
+Content:
 ```text
 {{episode.description}}
 
@@ -40,5 +132,3 @@ OUTLINE
 {{entry.time_code }} - {{entry.text}}
 {%- endfor %}
 ```
-
-

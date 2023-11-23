@@ -2,9 +2,14 @@
 
 This is a set of tools to make podcast publication easier.
 
-To use, make sure you have [Rust installed](https://www.rust-lang.org/tools/install).
+* [`description_maker`](./description_maker/): Create text used for promoting the podcast on several platforms
+
+* [`transcript_marker`](./transcript_marker/): Interleaves the outline with a transcript and adds a table of contents.
 
 ## Setup
+
+To use, make sure you have [Rust installed](https://www.rust-lang.org/tools/install).
+
 
 ### Running the tests
 
