@@ -1,20 +1,18 @@
 {{episode.description|linebreaksbr|safe}}
 
-
 EPISODE LINKS
-<ul><li><a href="{{ crate::template::get_transcript_url(episode, podcast_info) }}">Full transcript</a></li>
-{%- for link in episode.links -%}
-<li><a href="{{link.href}}">{{link.text}}</a></li>
-{%- endfor %}</ul>
-
+{%- set transcript_url = crate::template::get_transcript_url(episode, podcast_info) %}
+- Full transcript: <a href="{{transcript_url}}">{{transcript_url}}</a>
+{%- for link in episode.links %}
+- {{link.text}}: <a href="{{link.href}}">{{link.href}}</a>
+{%- endfor %}
 
 PODCAST LINKS
-<ul>{%- for link in podcast_info.links -%}
-<li><a href="{{link.href}}">{{link.text}}</a></li>
-{%- endfor %} </ul>
-
+{%- for link in podcast_info.links %}
+- {{link.text}}: <a href="{{link.href}}">{{link.href}}</a>
+{%- endfor %}
 
 OUTLINE
 {%- for entry in outline %}
-{{entry.time_code }} - {{entry.text}}
+({{entry.time_code }}) - {{entry.text}}
 {%- endfor %}

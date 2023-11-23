@@ -2,7 +2,6 @@ use std::fs;
 use std::path::PathBuf;
 
 use askama::Template;
-use htmlescape;
 use serde_yaml;
 
 use crate::types::{EpisodeInfo, Link, Noun, PodcastInfo};
@@ -60,9 +59,6 @@ fn get_transcript_url(episode: &EpisodeInfo, podcast_info: &PodcastInfo) -> Stri
 }
 
 fn prepare_html(text: &str) -> String {
-    // htmlescape::encode_minimal(text)
-    //     .replace("\n", "<br/>")
-    //     .replace("-", "&#8211;")
     text.replace("\n", "<br/>")
 }
 
