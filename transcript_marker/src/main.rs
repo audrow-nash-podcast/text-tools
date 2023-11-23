@@ -19,14 +19,14 @@ fn main() {
         )
         .arg(
             arg!(
-                <time_codes> "Sets the path to the time codes file"
+                <outline_path> "Sets the path to the outline file"
             )
             .required(true)
             .value_parser(value_parser!(PathBuf)),
         )
         .arg(
             arg!(
-                -o --out_file <file> "Path for where to save the output file"
+                -o --out_file_path <file> "Path for where to save the output file"
             )
             .default_value("marked_transcript.txt")
             .value_parser(value_parser!(PathBuf)),
@@ -36,21 +36,20 @@ fn main() {
     let transcript_path: &PathBuf = matches
         .get_one("transcript")
         .expect("A transcript file was provided");
-    let time_codes_path: &PathBuf = matches
-        .get_one("time_codes")
+    let outline_path: &PathBuf = matches
+        .get_one("outline_path")
         .expect("A time codes file was provided");
-    let out_path: &PathBuf = matches
-        .get_one("out_file")
+    let out_file_path: &PathBuf = matches
+        .get_one("out_file_path")
         .expect("An output file was provided");
 
     let transcript =
         std::fs::read_to_string(transcript_path).expect("The transcript file to be read");
-    let time_codes =
-        std::fs::read_to_string(time_codes_path).expect("The time codes file to be read");
+    let outline = std::fs::read_to_string(outline_path).expect("The time codes file to be read");
 
-    let mut outline_entries = parse_outline(&time_codes).expect("The time codes file to be parsed");
+    let mut outline_entries = parse_outline(&outline).expect("The time codes file to be parsed");
     let new_transcript =
         mark_transcript(&transcript, &mut outline_entries).expect("The transcript to be marked");
 
-    std::fs::write(out_path, new_transcript).expect("The output file to be written");
+    std::fs::write(out_file_path, new_transcript).expect("The output file to be written");
 }
