@@ -20,6 +20,9 @@ pub struct EpisodeInfo {
     pub links: Vec<Link>,
     pub guests: Vec<Noun>,
     pub organization: Option<Noun>,
+    pub youtube_video_url: Option<String>,
+    pub x_post_url: Option<String>,
+    pub spotify_for_podcasters_url: Option<String>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

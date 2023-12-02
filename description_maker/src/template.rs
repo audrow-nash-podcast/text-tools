@@ -1,5 +1,5 @@
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use askama::Template;
 use serde_yaml;
@@ -80,10 +80,9 @@ struct ContentTemplate {
     outline: Vec<OutlineEntry>,
 }
 
-pub fn make_podcast_info_starter(save_dir: &str) -> Result<(), Box<dyn std::error::Error>> {
-    if !std::path::Path::new(save_dir).exists() {
-        std::fs::create_dir_all(save_dir)?;
-    }
+pub fn make_podcast_info_starter(save_path: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+    make_sure_parent_dir_exists(save_path)?;
+
     let podcast_info = PodcastInfo {
         name: "Your great podcast".to_string(),
         transcript_site_url: "https://www.ygp.com/transcripts".to_string(),
@@ -100,19 +99,14 @@ pub fn make_podcast_info_starter(save_dir: &str) -> Result<(), Box<dyn std::erro
     };
 
     let podcast_yaml = serde_yaml::to_string(&podcast_info)?;
-    let podcast_file_path = format!("{}/podcast.yaml", save_dir);
-    std::fs::write(podcast_file_path, podcast_yaml)?;
+    std::fs::write(save_path, podcast_yaml)?;
 
     Ok(())
 }
 
-pub fn make_episode_starter(
-    save_dir: &str,
-    episode_file_name: &str,
-) -> Result<(), Box<dyn std::error::Error>> {
-    if !std::path::Path::new(save_dir).exists() {
-        std::fs::create_dir_all(save_dir)?;
-    }
+pub fn make_episode_starter(save_path: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+    make_sure_parent_dir_exists(save_path)?;
+
     let episode = EpisodeInfo {
         description: "Your great episode\non multiple lines.".to_string(),
         title: "Hello, world!".to_string(),
@@ -129,12 +123,33 @@ pub fn make_episode_starter(
             name: "Company".to_string(),
             x_handle: Some("company".to_string()),
         }),
+        youtube_video_url: None,
+        x_post_url: None,
+        spotify_for_podcasters_url: None,
     };
 
     let episode_yaml = serde_yaml::to_string(&episode)?;
-    let episode_file_path = format!("{}/{}", save_dir, episode_file_name);
-    std::fs::write(episode_file_path, episode_yaml)?;
+    std::fs::write(save_path, episode_yaml)?;
 
+    Ok(())
+}
+
+pub fn make_outline_starter(save_path: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+    make_sure_parent_dir_exists(save_path)?;
+
+    let text = "- 00:00:00 - TODO: ADD OUTLINE ENTRY\n";
+    std::fs::write(save_path, text)?;
+
+    Ok(())
+}
+
+fn make_sure_parent_dir_exists(path: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
+    let path = Path::new(path);
+    if let Some(parent) = path.parent() {
+        if !parent.exists() {
+            fs::create_dir_all(parent)?;
+        }
+    }
     Ok(())
 }
 
