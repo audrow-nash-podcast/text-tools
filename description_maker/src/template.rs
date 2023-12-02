@@ -137,7 +137,7 @@ pub fn make_episode_starter(save_path: &PathBuf) -> Result<(), Box<dyn std::erro
 pub fn make_outline_starter(save_path: &PathBuf) -> Result<(), Box<dyn std::error::Error>> {
     make_sure_parent_dir_exists(save_path)?;
 
-    let text = "- 00:00:00 - TODO: ADD OUTLINE ENTRY\n";
+    let text = "00:00:00 - TODO: ADD OUTLINE ENTRY\n";
     std::fs::write(save_path, text)?;
 
     Ok(())
