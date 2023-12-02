@@ -179,6 +179,7 @@ pub fn generate_content_markdown(
         outline: outline.clone(),
     };
     let content_md = content_template.render()?;
+    make_sure_parent_dir_exists(out_file_path)?;
     std::fs::write(out_file_path, content_md)?;
 
     Ok(())

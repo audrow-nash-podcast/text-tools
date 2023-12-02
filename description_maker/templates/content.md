@@ -15,11 +15,13 @@
 ### General
 
 Title:
+
 ```
 {{ episode.title }}
 ```
 
 Episode slug:
+
 ```
 {{ crate::template::get_episode_slug(episode) }}
 ```
@@ -27,11 +29,13 @@ Episode slug:
 ### Spotify
 
 Title:
+
 ```
 {{ episode.title }}
 ```
 
 Content:
+
 ```html
 {{ spotify_html }}
 ```
@@ -41,6 +45,7 @@ Content:
 #### Main episode
 
 First Tweet:
+
 ```
 HOOK
 
@@ -63,7 +68,7 @@ Time codes 👇
 
 Second tweet with details:
 
-```
+```text
 Transcript:
 - {{ crate::template::get_transcript_url(episode, podcast_info) }}
 
@@ -80,7 +85,9 @@ Podcast links:
 
 #### Clips on X
 
-```
+Tweet 1:
+
+```text
 HOOK
 
 With {{ crate::template::and_names_on_x(episode.guests)}}
@@ -92,49 +99,58 @@ With {{ crate::template::and_names_on_x(episode.guests)}}
 .
 ```
 
-```
+Tweet 2:
+
+```text
 Watch the full interview here 👇
 
-{%- match episode.x_post_url -%}
+{% match episode.x_post_url -%}
     {%- when Some with (url) -%}
         {{ url }}
     {%- when None -%}
         ADD X POST URL TO CONFIG
-{%- endmatch -%}
+{%- endmatch %}
 ```
 
 ### LinkedIn
 
-```
+```text
 🚨 New episode 🚨
 
+Interview with {{ crate::template::and_names(episode.guests)}}
+{%- match episode.organization -%}
+    {%- when Some with (org) -%}
+        {{' '}}from {{ org.name }}
+    {%- when None -%}
+{%- endmatch -%}
+.
 {{episode.title}}
 
 {{episode.description}}
 
 Watch and discuss on 𝕏:
-{%- match episode.x_post_url -%}
+{% match episode.x_post_url -%}
     {%- when Some with (url) -%}
         {{ url }}
     {%- when None -%}
         ADD X POST URL TO CONFIG
-{%- endmatch -%}
+{% endmatch %}
 
 Watch on Youtube:
-{%- match episode.youtube_video_url -%}
+{% match episode.youtube_video_url -%}
     {%- when Some with (url) -%}
         {{ url }}
     {%- when None -%}
         ADD YOUTUBE URL TO CONFIG
-{%- endmatch -%}
+{% endmatch %}
 
 Or listen on your favorite podcasting app.
-{%- match episode.spotify_for_podcasters_url -%}
+{% match episode.spotify_for_podcasters_url -%}
     {%- when Some with (url) -%}
         {{ url }}
     {%- when None -%}
         ADD SPOTIFY_FOR_PODCASTERS URL TO CONFIG
-{%- endmatch -%}
+{% endmatch %}
 ```
 
 ### YouTube
@@ -142,11 +158,13 @@ Or listen on your favorite podcasting app.
 #### Main episode
 
 Title:
-```
+
+```text
 {{ episode.title }}
 ```
 
 Content:
+
 ```text
 {{episode.description}}
 
@@ -172,21 +190,22 @@ OUTLINE
 #### Clips on YouTube
 
 ```text
-With {{ crate::template::and_names(episode.guests)}}
+Interview with {{ crate::template::and_names(episode.guests)}}
 {%- match episode.organization -%}
     {%- when Some with (org) -%}
         {{' '}}from {{ org.name }}
     {%- when None -%}
 {%- endmatch -%}
+.
 
 Watch the full interview here 👇
 
-{%- match episode.youtube_video_url -%}
+{% match episode.youtube_video_url -%}
     {%- when Some with (url) -%}
         {{ url }}
     {%- when None -%}
         ADD YOUTUBE URL TO CONFIG
-{%- endmatch -%}
+{% endmatch %}
 
 PODCAST LINKS
 {%- for link in podcast_info.links %}
