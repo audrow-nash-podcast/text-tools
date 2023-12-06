@@ -6,11 +6,11 @@
 - [Spotify](#spotify)
 - [YouTube](#youtube)
     - [Main episode](#main-episode)
-    - [Clips on YouTube](#clips-on-youtube)
 - [X](#x)
     - [Main episode](#main-episode)
     - [Clips on X](#clips-on-x)
 - [LinkedIn](#linkedin)
+- [Bulk clips](#bulk-clips)
 
 ### General
 
@@ -48,8 +48,6 @@ Content:
 
 ### YouTube
 
-#### Main episode
-
 Title:
 
 ```text
@@ -77,32 +75,6 @@ PODCAST LINKS
 OUTLINE
 {%- for entry in outline %}
 - {{entry.time_code }} - {{entry.text}}
-{%- endfor %}
-```
-
-#### Clips on YouTube
-
-```text
-Interview with {{ crate::template::and_names(episode.guests)}}
-{%- match episode.organization -%}
-    {%- when Some with (org) -%}
-        {{' '}}from {{ org.name }}
-    {%- when None -%}
-{%- endmatch -%}
-.
-
-Watch the full interview here 👇
-
-{% match episode.youtube_video_url -%}
-    {%- when Some with (url) -%}
-        {{ url }}
-    {%- when None -%}
-        ADD YOUTUBE URL TO CONFIG
-{% endmatch %}
-
-PODCAST LINKS
-{%- for link in podcast_info.links %}
-- {{link.text}}: {{link.href}}
 {%- endfor %}
 ```
 
@@ -183,16 +155,16 @@ Watch the full interview here 👇
 ```text
 🚨 New episode 🚨
 
+{{episode.description}}
+
 Interview with {{ crate::template::and_names(episode.guests)}}
+
 {%- match episode.organization -%}
     {%- when Some with (org) -%}
         {{' '}}from {{ org.name }}
     {%- when None -%}
 {%- endmatch -%}
 .
-{{episode.title}}
-
-{{episode.description}}
 
 Watch and discuss on 𝕏:
 {% match episode.x_post_url -%}
@@ -202,7 +174,7 @@ Watch and discuss on 𝕏:
         ADD X POST URL TO CONFIG
 {% endmatch %}
 
-Watch on Youtube:
+Watch on YouTube:
 {% match episode.youtube_video_url -%}
     {%- when Some with (url) -%}
         {{ url }}
@@ -217,4 +189,38 @@ Or listen on your favorite podcasting app.
     {%- when None -%}
         ADD SPOTIFY_FOR_PODCASTERS URL TO CONFIG
 {% endmatch %}
+```
+
+## Bulk clips
+
+```
+🔊 ... "QUOTE"
+
+With {{ crate::template::and_names(episode.guests)}}
+
+Watch and discuss on 𝕏:
+{% match episode.x_post_url -%}
+    {%- when Some with (url) -%}
+        {{ url }}
+    {%- when None -%}
+        ADD X POST URL TO CONFIG
+{% endmatch %}
+
+Watch on YouTube:
+{% match episode.youtube_video_url -%}
+    {%- when Some with (url) -%}
+        {{ url }}
+    {%- when None -%}
+        ADD YOUTUBE URL TO CONFIG
+{% endmatch %}
+
+Or listen on your favorite podcasting app.
+{% match episode.spotify_for_podcasters_url -%}
+    {%- when Some with (url) -%}
+        {{ url }}
+    {%- when None -%}
+        ADD SPOTIFY_FOR_PODCASTERS URL TO CONFIG
+{% endmatch %}
+
+#Robotics #TechStartups #Innovation #TechTrends #OutdoorRobotics #AI #MachineLearning #Entrepreneur #AudrowNashPodcast #Interview #Robot
 ```
