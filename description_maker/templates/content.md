@@ -98,7 +98,7 @@ With {{ crate::template::and_names_on_x(episode.guests)}}
 Time codes 👇
 
 {%- for entry in outline %}
-({{entry.time_code }}) {{entry.text}}
+{{entry.time_code }} - {{entry.text}}
 {%- endfor %}
 ```
 
