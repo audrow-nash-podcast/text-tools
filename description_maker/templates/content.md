@@ -4,13 +4,13 @@
 
 - [General](#general)
 - [Spotify](#spotify)
+- [YouTube](#youtube)
+    - [Main episode](#main-episode-1)
+    - [Clips on YouTube](#clips-on-youtube)
 - [X](#x)
     - [Main episode](#main-episode)
     - [Clips on X](#clips-on-x)
 - [LinkedIn](#linkedin)
-- [YouTube](#youtube)
-    - [Main episode](#main-episode-1)
-    - [Clips on YouTube](#clips-on-youtube)
 
 ### General
 
