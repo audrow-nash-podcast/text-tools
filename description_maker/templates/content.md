@@ -5,7 +5,7 @@
 - [General](#general)
 - [Spotify](#spotify)
 - [YouTube](#youtube)
-    - [Main episode](#main-episode-1)
+    - [Main episode](#main-episode)
     - [Clips on YouTube](#clips-on-youtube)
 - [X](#x)
     - [Main episode](#main-episode)
