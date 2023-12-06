@@ -5,10 +5,7 @@
 - [General](#general)
 - [Spotify](#spotify)
 - [YouTube](#youtube)
-    - [Main episode](#main-episode)
 - [X](#x)
-    - [Main episode](#main-episode)
-    - [Clips on X](#clips-on-x)
 - [LinkedIn](#linkedin)
 - [Bulk clips](#bulk-clips)
 
@@ -80,8 +77,6 @@ OUTLINE
 
 ### X
 
-#### Main episode
-
 First Tweet:
 
 ```
@@ -119,34 +114,6 @@ Podcast links:
 {%- endfor %}
 ```
 
-#### Clips on X
-
-Tweet 1:
-
-```text
-HOOK
-
-With {{ crate::template::and_names_on_x(episode.guests)}}
-{%- match episode.organization -%}
-    {%- when Some with (org) -%}
-        {{' '}}from {{ crate::template::get_name_on_x(org) }}
-    {%- when None -%}
-{%- endmatch -%}
-.
-```
-
-Tweet 2:
-
-```text
-Watch the full interview here 👇
-
-{% match episode.x_post_url -%}
-    {%- when Some with (url) -%}
-        {{ url }}
-    {%- when None -%}
-        ADD X POST URL TO CONFIG
-{%- endmatch %}
-```
 
 ### LinkedIn
 
