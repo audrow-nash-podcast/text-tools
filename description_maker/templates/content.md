@@ -85,8 +85,6 @@ OUTLINE
 First Tweet:
 
 ```
-HOOK
-
 {{episode.title}}
 
 With {{ crate::template::and_names_on_x(episode.guests)}}
@@ -197,6 +195,12 @@ Or listen on your favorite podcasting app.
 🔊 ... "QUOTE"
 
 With {{ crate::template::and_names(episode.guests)}}
+{%- match episode.organization -%}
+    {%- when Some with (org) -%}
+        {{' '}}from {{ org.name }}
+    {%- when None -%}
+{%- endmatch -%}
+.
 
 Watch and discuss on 𝕏:
 {% match episode.x_post_url -%}
@@ -223,4 +227,22 @@ Or listen on your favorite podcasting app.
 {% endmatch %}
 
 #Robotics #TechStartups #Innovation #TechTrends #OutdoorRobotics #AI #MachineLearning #Entrepreneur #AudrowNashPodcast #Interview #Robot
+```
+
+X with block:
+```
+With {{ crate::template::and_names_on_x(episode.guests)}}
+{%- match episode.organization -%}
+    {%- when Some with (org) -%}
+        {{' '}}from {{ crate::template::get_name_on_x(org) }}
+    {%- when None -%}
+{%- endmatch %}
+
+You can find the full episode here:
+{% match episode.x_post_url -%}
+    {%- when Some with (url) -%}
+        {{ url }}
+    {%- when None -%}
+        ADD X POST URL TO CONFIG
+{% endmatch %}
 ```
