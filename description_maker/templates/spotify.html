@@ -1,5 +1,13 @@
 {{episode.description|linebreaksbr|safe}}
 
+With {{ crate::template::and_names(episode.guests)}}
+{%- match episode.organization -%}
+    {%- when Some with (org) -%}
+        {{' '}}from {{ org.name }}
+    {%- when None -%}
+{%- endmatch -%}
+.
+
 EPISODE LINKS
 {%- set transcript_url = crate::template::get_transcript_url(episode, podcast_info) %}
 - Full transcript: <a href="{{transcript_url}}">{{transcript_url}}</a>

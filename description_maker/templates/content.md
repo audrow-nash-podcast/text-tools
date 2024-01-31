@@ -56,6 +56,14 @@ Content:
 ```text
 {{episode.description}}
 
+With {{ crate::template::and_names(episode.guests)}}
+{%- match episode.organization -%}
+    {%- when Some with (org) -%}
+        {{' '}}from {{ org.name }}
+    {%- when None -%}
+{%- endmatch -%}
+.
+
 TRANSCRIPT
 - {{ crate::template::get_transcript_url(episode, podcast_info) }}
 
@@ -71,7 +79,7 @@ PODCAST LINKS
 
 OUTLINE
 {%- for entry in outline %}
-- {{entry.time_code }} - {{entry.text}}
+{{entry.time_code }} {{entry.text}}
 {%- endfor %}
 ```
 
@@ -80,7 +88,11 @@ OUTLINE
 First Tweet:
 
 ```
+🚨 New episode 🚨
+
 {{episode.title}}
+
+{{episode.description}}
 
 With {{ crate::template::and_names_on_x(episode.guests)}}
 {%- match episode.organization -%}
@@ -93,7 +105,7 @@ With {{ crate::template::and_names_on_x(episode.guests)}}
 Time codes 👇
 
 {%- for entry in outline %}
-{{entry.time_code }} - {{entry.text}}
+{{entry.time_code }} {{entry.text}}
 {%- endfor %}
 ```
 
@@ -120,9 +132,17 @@ Podcast links:
 ```text
 🚨 New episode 🚨
 
+{{episode.title}}
+
 {{episode.description}}
 
-Interview with {{ crate::template::and_names(episode.guests)}}
+With {{ crate::template::and_names(episode.guests)}}
+{%- match episode.organization -%}
+    {%- when Some with (org) -%}
+        {{' '}}from {{ org.name }}
+    {%- when None -%}
+{%- endmatch -%}
+.
 
 {%- match episode.organization -%}
     {%- when Some with (org) -%}
