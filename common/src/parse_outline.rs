@@ -27,7 +27,7 @@ pub fn parse_outline(outline: &str) -> Result<Vec<OutlineEntry>, ParseOutlineErr
     let mut entries = vec![];
 
     let outline_entry_regex =
-        Regex::new(r"(.+) - (.+)").expect("Outline entry capture regex is valid");
+        Regex::new(r"([\d:]+) (.+)").expect("Outline entry capture regex is valid");
 
     for line in outline.lines() {
         let captures = outline_entry_regex
@@ -112,7 +112,7 @@ mod tests {
 
         let outline_text = outline_entries
             .iter()
-            .map(|entry| format!("{} - {}", entry.time_code, entry.text))
+            .map(|entry| format!("{} {}", entry.time_code, entry.text))
             .collect::<Vec<String>>()
             .join("\n");
 
@@ -133,7 +133,7 @@ mod tests {
 
     #[test]
     fn error_for_invalid_minutes() {
-        let outline_text = "00:60:00 - Introducing Bradley and Luxonis";
+        let outline_text = "00:60:00 Introducing Bradley and Luxonis";
         let result = parse_outline(&outline_text);
 
         assert!(result.is_err());
@@ -145,31 +145,7 @@ mod tests {
 
     #[test]
     fn error_for_invalid_seconds() {
-        let outline_text = "00:01:60 - Introducing Bradley and Luxonis";
-        let result = parse_outline(&outline_text);
-
-        assert!(result.is_err());
-        assert!(matches!(
-            result.unwrap_err(),
-            ParseOutlineError::InvalidTimeCode(_)
-        ));
-    }
-
-    #[test]
-    fn errors_for_invalid_outline_entry_minutes() {
-        let outline_text = "00:1:00 - Some text";
-        let result = parse_outline(&outline_text);
-
-        assert!(result.is_err());
-        assert!(matches!(
-            result.unwrap_err(),
-            ParseOutlineError::InvalidTimeCode(_)
-        ));
-    }
-
-    #[test]
-    fn errors_for_invalid_outline_entry_seconds() {
-        let outline_text = "00:01:0 - Some text";
+        let outline_text = "00:01:60 Introducing Bradley and Luxonis";
         let result = parse_outline(&outline_text);
 
         assert!(result.is_err());
@@ -181,7 +157,7 @@ mod tests {
 
     #[test]
     fn errors_for_no_text() {
-        let outline_text = "00:01:00 - ";
+        let outline_text = "00:01:00 ";
         let result = parse_outline(&outline_text);
 
         assert!(result.is_err());
