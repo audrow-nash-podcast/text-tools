@@ -8,6 +8,7 @@
 - [X](#x)
 - [LinkedIn](#linkedin)
 - [Bulk clips](#bulk-clips)
+- [Links for sharing](#links-for-sharing)
 
 ### General
 
@@ -231,5 +232,30 @@ You can find the full episode here:
         {{ url }}
     {%- when None -%}
         ADD X POST URL TO CONFIG
+{% endmatch %}
+```
+
+### Links for sharing
+
+```
+X: {% match episode.x_post_url -%}
+    {%- when Some with (url) -%}
+        {{ url }}
+    {%- when None -%}
+        ADD X POST URL TO CONFIG
+{% endmatch %}
+
+YouTube: {% match episode.youtube_video_url -%}
+    {%- when Some with (url) -%}
+        {{ url }}
+    {%- when None -%}
+        ADD YOUTUBE URL TO CONFIG
+{% endmatch %}
+
+Spotify: {% match episode.spotify_for_podcasters_url -%}
+    {%- when Some with (url) -%}
+        {{ url }}
+    {%- when None -%}
+        ADD SPOTIFY_FOR_PODCASTERS URL TO CONFIG
 {% endmatch %}
 ```
