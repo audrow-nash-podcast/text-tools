@@ -145,13 +145,6 @@ With {{ crate::template::and_names(episode.guests)}}
 {%- endmatch -%}
 .
 
-{%- match episode.organization -%}
-    {%- when Some with (org) -%}
-        {{' '}}from {{ org.name }}
-    {%- when None -%}
-{%- endmatch -%}
-.
-
 Watch and discuss on 𝕏:
 {% match episode.x_post_url -%}
     {%- when Some with (url) -%}
